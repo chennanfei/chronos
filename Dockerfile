@@ -18,8 +18,3 @@ RUN cp target/chronos.jar /
 RUN rm -rf /chronos/*
 RUN apt-get remove git maven2
 
-COPY chronos_run.sh /
-RUN chmod +x /chronos_run.sh
-
-EXPOSE 8080
-CMD ["/chronos_run.sh"]
