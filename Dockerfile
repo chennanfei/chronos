@@ -13,7 +13,7 @@ RUN mkdir chronos
 WORKDIR /chronos
 
 RUN git clone https://github.com/mesos/chronos.git /chronos
-RUN mvn clean pakcage
+RUN mvn package
 RUN cp target/chronos.jar /
 RUN rm -rf /chronos/*
 RUN apt-get remove git maven2
