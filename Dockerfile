@@ -1,21 +1,25 @@
-# Chronos
 FROM ubuntu:14.04
-MAINTAINER Nanfei Chen
 
-ENV DEB_VERSION_CHRONOS 2.3.2-0.1.20150207000917.debian77
-ENV DEB_VERSION_MESOS 0.21.1-1.2.debian77
-
-RUN echo "deb http://repos.mesosphere.io/debian wheezy main" > /etc/apt/sources.list.d/mesosphere.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
-RUN apt-get update
-RUN apt-get -f -y install chronos=$DEB_VERSION_CHRONOS mesos=$DEB_VERSION_MESOS
+RUN echo "deb http://repos.mesosphere.io/ubuntu trusty main" | \
+  sudo tee /etc/apt/sources.list.d/mesosphere.list
 
-# we don't want to use localhost as zk_host
-RUN rm /etc/mesos/zk
+RUN apt-get update && apt-get install -y openjdk-7-jre-headless mesos git maven2
 
-# don't set http_port 
-RUN rm /etc/chronos/conf/http_port
+ENV MESOS_NATIVE_JAVA_LIBRARY /usr/local/lib/libmesos.so
+ENV CHRONOS_VERSION 2.3.4
+
+RUN mkdir chronos
+WORKDIR /chronos
+
+RUN git clone https://github.com/mesos/chronos.git /chronos
+RUN mvn clean pakcage
+RUN cp target/chronos.jar /
+RUN rm -rf /chronos/*
+RUN apt-get remove git maven2
+
+COPY chronos_run.sh /
+RUN chmod +x /chronos_run.sh
 
 EXPOSE 8080
-
-ENTRYPOINT ["/usr/bin/chronos"]
+CMD ["/chronos_run.sh"]
