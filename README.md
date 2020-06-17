@@ -14,12 +14,12 @@ Installed from [Mesosphere](https://mesosphere.com)
 
 ## example:
 
-### running from command line
+#### running from command line
 ```
 docker run -d tomaskral/chronos  --master zk://zoo1:2181,zoo2:2181,zoo3:2181/mesos --zk_hosts zoo1:2181,zoo2:2181,zoo3:2181
 ```
 
-### running on Marathon
+#### running on Marathon
 ```
 {
     "id": "/chronos",
